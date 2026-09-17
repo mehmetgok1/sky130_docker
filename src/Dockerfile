@@ -73,5 +73,29 @@ RUN printf "This environment is designed for the EE 537 course under the supervi
 COPY wallpaper.jpeg /usr/share/backgrounds/wallpaper.jpeg
 COPY --chmod=755 entry.sh /entry.sh
 
+# Environment variables
+ENV PDK_ROOT=/usr/local/share/pdk
+ENV PDK=sky130A
+
 USER beta_vlsi
+WORKDIR /home/beta_vlsi
+
+# Write permanent xschemrc configuration
+RUN mkdir -p /home/beta_vlsi/.xschem && \
+    printf 'set PDK_ROOT /usr/local/share/pdk\n\
+set PDK sky130A\n\
+set 130_PATH $PDK_ROOT/$PDK/libs.tech/xschem\n\
+set XSCHEM_LIBRARY_PATH {}\n\
+append XSCHEM_LIBRARY_PATH :${XSCHEM_SHAREDIR}/xschem_library/devices\n\
+append XSCHEM_LIBRARY_PATH :${XSCHEM_SHAREDIR}/xschem_library\n\
+append XSCHEM_LIBRARY_PATH :$130_PATH\n\
+append XSCHEM_LIBRARY_PATH :$130_PATH/sky130_fd_pr\n\
+append XSCHEM_LIBRARY_PATH :$130_PATH/sky130_tests\n\
+append XSCHEM_LIBRARY_PATH :$130_PATH/sky130_stdcells\n\
+append XSCHEM_LIBRARY_PATH :$130_PATH/mips_cpu\n\
+append XSCHEM_LIBRARY_PATH :[file dirname [file normalize [info script]]]\n\
+set SKYWATER_MODELS $PDK_ROOT/$PDK/libs.tech/combined\n\
+set SKYWATER_STDCELLS $PDK_ROOT/$PDK/libs.ref/sky130_fd_sc_hd/spice\n' > /home/beta_vlsi/.xschem/xschemrc
+RUN echo 'set xschem_execute_scripts 1' >> /home/beta_vlsi/.xschem/xschemrc
+
 ENTRYPOINT ["/entry.sh"]
