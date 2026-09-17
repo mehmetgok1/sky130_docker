@@ -77,6 +77,13 @@ COPY --chmod=755 entry.sh /entry.sh
 ENV PDK_ROOT=/usr/local/share/pdk
 ENV PDK=sky130A
 
+# Build Gaw waveform viewer
+RUN apt-get update && apt-get install -y --no-install-recommends libgtk-3-dev && \
+    git clone https://github.com/StefanSchippers/xschem-gaw.git gaw && \
+    cd gaw && ./configure && make -j$(nproc) && make install && \
+    cd /tools && rm -rf gaw && \
+    rm -rf /var/lib/apt/lists/*
+
 USER beta_vlsi
 WORKDIR /home/beta_vlsi
 
@@ -97,5 +104,7 @@ append XSCHEM_LIBRARY_PATH :[file dirname [file normalize [info script]]]\n\
 set SKYWATER_MODELS $PDK_ROOT/$PDK/libs.tech/combined\n\
 set SKYWATER_STDCELLS $PDK_ROOT/$PDK/libs.ref/sky130_fd_sc_hd/spice\n' > /home/beta_vlsi/.xschem/xschemrc
 RUN echo 'set xschem_execute_scripts 1' >> /home/beta_vlsi/.xschem/xschemrc
+
+
 
 ENTRYPOINT ["/entry.sh"]
