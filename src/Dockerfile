@@ -105,6 +105,13 @@ set SKYWATER_MODELS $PDK_ROOT/$PDK/libs.tech/combined\n\
 set SKYWATER_STDCELLS $PDK_ROOT/$PDK/libs.ref/sky130_fd_sc_hd/spice\n' > /home/beta_vlsi/.xschem/xschemrc
 RUN echo 'set xschem_execute_scripts 1' >> /home/beta_vlsi/.xschem/xschemrc
 
-
+# Upgrade KLayout to 0.30.12 at the end to keep Docker build cache
+USER root
+RUN curl -L -O https://www.klayout.org/downloads/Ubuntu-22/klayout_0.30.12-1_amd64.deb && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends ./klayout_0.30.12-1_amd64.deb && \
+    rm -f klayout_0.30.12-1_amd64.deb && \
+    rm -rf /var/lib/apt/lists/*
+USER beta_vlsi
 
 ENTRYPOINT ["/entry.sh"]
