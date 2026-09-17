@@ -113,5 +113,8 @@ RUN curl -L -O https://www.klayout.org/downloads/Ubuntu-22/klayout_0.30.12-1_amd
     rm -f klayout_0.30.12-1_amd64.deb && \
     rm -rf /var/lib/apt/lists/*
 USER beta_vlsi
-
+WORKDIR /home/beta_vlsi
+# Auto-link Sky130 PDK tech and layer properties into KLayout
+RUN mkdir -p /home/beta_vlsi/.klayout/tech && \
+    ln -snf /usr/local/share/pdk/sky130A/libs.tech/klayout /home/beta_vlsi/.klayout/tech/sky130A
 ENTRYPOINT ["/entry.sh"]
