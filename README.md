@@ -14,7 +14,7 @@ Otherwise, use the published Docker Hub image:
 
 ```bash
 docker pull desobey/beta_vlsi:latest
-docker run -d \
+docker run -d --rm \
   -p 5901:5901 \
   -p 6080:6080 \
   --shm-size=2g \
