@@ -279,4 +279,27 @@ your_design.gds your_design.spice
 ![Step 20: pex generation](src/media/step20_pexresult.png)
 
 
+### 21. pex sim on symbol
+now we have parasitics added spice file for ourselves we need to make some tweaks in before make sym of that remember we created symbol for this inverter at first please open that in xschem left click some empty area and then press q
+
+then as you can see the image below change type:subcircuit to type:primitive
+
+![Step 21: pex sim on symbol](src/media/step21_symboltypeprimitve.png)
+
+
+### 22. pex sim on tb
+this is where say in testbench we add spice definition which symbol waits for us
+add that .include line 
+
+please not forget to edit path as where and what name you put.
+
+after that you can check netlist again 
+
+note: if you press shift+a and click netlist it will show netlist inplace
+note: there are other ways to import pex spice to tb you can search and use
+
+
+after this again you can use waveformviewer probably not much different for simple inverter wrt schematic one:)
+![Step 22: pex sim on tb](src/media/step22_pextbedit.png)
+
 
