@@ -198,5 +198,85 @@ and gate contact position to top
 ### 15. inverter layout
 place pfet thing again be sure width legth other stuff and draw connections
 
- 
+to draw something on right click the layer and press box above such that you can paths etc
+
+explaining everything here will lengthten the situation i will add youtube video to show how to do things 
+
+[add youtube link here ]
+
 ![Step 15: inverter layout](src/media/step15_klayoutinverter.png)
+
+### 16. DRC
+to run DRC you can select that toolbar with option if everything goes well you will see something like below 
+
+if now you will see some numbers where when you click that numbers it will explain and highlght the point in layout
+
+![Step 16: DRC](src/media/step16_drcwindow.png)
+
+
+### 17. LVS
+to run LVS you need to 
+again go to e fabless sky and this time press run lvs
+
+after that you need to select .spice file you generated and kick open
+![Step 17: LVS](src/media/step17_lvswindow.png)
+
+### 18. LVS
+some options will be given here you can leave default and check results after run
+
+unfortunately this is not given all lvs checks but interms of coarse level check this is very quick and you can look at and fix some things 
+
+meanwhile some time to  time please go file->save :)
+![Step 18: LVS](src/media/step18_lvsoptions.png)
+
+### 19. LVS netgen
+as said in above step lvs in klayout is not full check but we can use another tool for quick check for the sake of ease to lvs check and prevent manual pin overwrites and stuff 
+we provide simple bash script gds2spice
+
+before running lvs please create another directory inside layout directory as lvs
+
+type "mkdir lvs" to commandline
+cd lvs
+
+cp ../your_design.spice .
+cp ../your_design.gds .
+
+first step we need to use gds2spice to get .spice file from gds by 
+(run inside lvs folder where you just copied stuff)
+gds2spice your_design.gds your_design.spice
+
+it should create your_design_magic.spice
+
+you can investigate it at as you wish
+
+to compare this layout generated spice which schematic generated one 
+
+use netgen as follows
+
+netgen -batch lvs "your_design_magic.spice (top level name probably your_design)"\
+"your_design.spice (top level name probably your_design)" $PDK_ROOT/$PDK_ROOT/$PDK/libs.tech/netgen/sky130A_setup.tcl
+
+this will give you comp.out and at the end you can see schematic vs layout check matched or not
+
+note: this is actualy loading this klayout thing in magic and try to make ext2spice you can modify the shell script as you wish and remember this is still under development and could have some problems
+
+![Step 19: LVS netgen](src/media/step19_netgenlvscheck.png)
+
+
+### 20. pex generation
+before running pex please create another directory inside layout directory as pex (pex and lvs are both under layout same hierarchy)
+
+type "mkdir pex" to commandline
+cd pex 
+
+cp ../your_design.spice .
+cp ../your_design.gds .
+
+then run another script we provide to gds2pex
+
+your_design.gds your_design.spice
+
+![Step 20: pex generation](src/media/step20_pexresult.png)
+
+
+
