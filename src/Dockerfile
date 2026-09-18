@@ -132,5 +132,15 @@ RUN python3 -m pip install --no-cache-dir --user gdsfactory
 # Add sky stdcells to klayout
 RUN mkdir -p /home/beta_vlsi/.klayout/libraries && \
     find /usr/local/share/pdk/sky130A/libs.ref -type f -name "*.gds" -exec ln -snf {} /home/beta_vlsi/.klayout/libraries/ \;
+# add alias to magic for auto rcfile call
+RUN echo 'alias magic="magic -rcfile /usr/local/share/pdk/sky130A/libs.tech/magic/sky130A.magicrc"' >> /home/beta_vlsi/.bashrc
+
+# Copy extraction helper scripts to system PATH
+USER root
+COPY --chmod=755 gds2spice.sh /usr/local/bin/gds2spice
+COPY --chmod=755 gds2pex.sh /usr/local/bin/gds2pex
+
+USER beta_vlsi
+WORKDIR /home/beta_vlsi
 
 ENTRYPOINT ["/entry.sh"]
