@@ -34,69 +34,77 @@ The screenshots below provide a quick path from creating a schematic to
 viewing its simulation waveform. More detailed explanations will be added as
 the workflow grows.
 
-### 1. Open a terminal
+### 1. Open a Terminal
 
 Start with the terminal commands needed for the project.
 
-pwd : shows current directory (print working directory)
+`pwd`: shows the current directory (print working directory).
 
-cd : change directory (if empty it goes to user's home directly)
+`cd`: changes the directory. If empty, it goes directly to the user's home directory.
 
-xschem: after you are sure you are in work directory (work directory where
-you link you permanent storage; anything not here will be losed after docker container finished) 
+`xschem`: run this after you are sure you are in the work directory. This is
+where you link your permanent storage; anything not here will be lost after
+the Docker container finishes.
 
 ![Step 1: Terminal commands](src/media/step1_terminal_commands.png)
 
 ### 2. Place an NMOS
-After you typed xschem in terminal it will open gui like the one below.
+
+After you type `xschem` in the terminal, it will open a GUI like the one below.
 
 Add the NMOS device to the schematic.
 
-Add the PMOS version yourself it will be in place with nmos (you can use fuzzy search)
+Add the PMOS version yourself; it will be next to the NMOS in the library (you
+can use fuzzy search).
 ![Step 2: Place an NMOS](src/media/step2_placenmos.png)
 
-### 3. Add schematic pins
-left part of the below window lists some of the available libraries to us.
+### 3. Add Schematic Pins
 
-/usr/local/share/xschem/xschem_library/devices/ lib provide us ideal res cap and dc sources etc. 
+The left part of the window below lists some of the available libraries.
 
-other libraries are sky130 related and you will figure out them on the go.
+`/usr/local/share/xschem/xschem_library/devices/` provides ideal resistors,
+capacitors, and DC sources.
+
+The other libraries are Sky130-related, and you will become familiar with them
+as you go.
 
 Add the pins needed to connect and test the circuit.
 
 ![Step 3: Pins added to the schematic](src/media/step3_pinsaddedsch.png)
 
-### 4. Rename pin names
+### 4. Rename Pin Names
 
 Rename the pins so they match the intended circuit signals.
 
-to edit jsut double click on pin or click and press q then edit name in lab=
+To edit, double-click on a pin or click it and press `q`, then edit the name in the label.
 
 ![Step 4: Rename pin names](src/media/step4_howtorenamepinname.png)
 
-### 5. Make a symbol
+### 5. Make a Symbol
 
-Create a reusable symbol from the schematic. by shown toolbar section
+Create a reusable symbol from the schematic using the shown toolbar section.
 
 ![Step 5: Make a symbol](src/media/step5_makesymbol.png)
 
-### 6. Open the symbol
+### 6. Open the Symbol
 
 Open the generated symbol for use in a testbench.
 
-Your one will be more like square and something you can as you cosmetic pleasure
+Your symbol will be more like a square and can be customized for appearance.
 ![Step 6: Open the symbol](src/media/step6_opensymbol.png)
 
-### 7. Create a testbench
+### 7. Create a Testbench
 
-click + icon above near sym and sch pages it will give you untitled page.
+Click the `+` icon above, near the `sym` and `sch` pages, to get an untitled page.
 
-speaking of which if you wanted to change name your schematic simply click file -> save as and change untitled thing there
+To change the schematic name, click **File -> Save As** and change the untitled name.
 
 Build a testbench around the circuit symbol.
 
-ngspice and xschem cowork together upon scriptiong so you should understand how it works to some extend to write something add code_shown from where you add pins and inside it is like an example below 
+ngspice and xschem work together through scripting. Add a `code_shown` block
+where you add pins. An example is below:
 
+```text
 name=COMMANDS2
 simulator=ngspice
 only_toplevel=false
@@ -107,199 +115,296 @@ value="
   write untitled.raw
 .endc
 "
+```
 
 ![Step 7: Testbench creation](src/media/step7_tbcreation.png)
 
-### 8. Find models and examples
-probably in above section you can ask where to find the stuff that tt_models and other stuff for that sky130 give us some top level examples which you can reach as below to check what are working examples
+### 8. Find Models and Examples
 
-inside the top level if you wanted to go inside anything click and press e then if you want to go upper hierarchy again press ctrl+e
+The top level provides `tt_models` and other Sky130 examples that you can use
+to check working examples.
+
+Inside the top level, click and press `e` to go inside anything. Press `Ctrl+E`
+to go up one hierarchy level.
 
 Locate the technology models and example files used by the simulation.
 
 ![Step 8: Find TT models and examples](src/media/step8_wheretofindttmodelsandexamples.png)
 
-### 9. Run the simulation
+### 9. Run the Simulation
 
 Run the simulation and confirm that it completes successfully.
 
 ![Step 9: Successful simulation](src/media/step9_succesfullsim.png)
 
-### 10. open external waveform viewer
+### 10. Open the External Waveform Viewer
 
 Open the external waveform viewer to inspect the results.
 
-there are other ways to plot and measure things but for now you can use external viewe 
+There are other ways to plot and measure things, but for now you can use the
+external viewer.
 
-you can resize it after enable preferences->allow resize
+You can resize it after enabling **Preferences -> Allow Resize**.
 
 ![Step 10: External waveform viewer](src/media/step10_externalwaveformviewer.png)
 
-### 11. View the waveforms
-after loaded small window will be given to you and you can drag signal e.g V(in) to one of the panes
+### 11. View the Waveforms
 
-middle click control second cursor left click control first cursor 
+After loading, a small window will be given to you. Drag a signal, such as
+`V(in)`, to one of the panes.
 
-you can resize y scale after clicking one pane go to zoom-> zoom dialog and change y things
+Middle-click to control the second cursor; left-click to control the first cursor.
 
-you can go between toolbar options to see more ylabels grids etc
+You can resize the y scale by clicking one pane, then going to **Zoom -> Zoom
+Dialog** and changing the y settings.
+
+You can use the toolbar options to show more y-labels, grids, and so on.
 
 ![Step 11: External waveform viewer](src/media/step11_loadplotsdata.png)
 
-### 12. layout preparation (Klayout based layout will be discussed here for magic you will be directed)
-to make things easier we need to change some netlisting options please open your desin schematic not symbol not testbench
+### 12. Layout Preparation
 
-then ensure that ones are chosen at you also 
+KLayout-based layout is discussed here; for Magic, you will be directed to a
+different workflow.
 
-after that click netlist 
+To make things easier, change some netlisting options. Open your design
+schematic, not the symbol or testbench.
 
-to get the netlist into your current directory(otherwise will be deleted as we said)
+Then ensure that the required options are selected.
 
-run in terminal cp ~/.xschem/simulations/yourdesignname.spice .
-(your terminal is blocked by xschem simply say file open tab in that terminal and run above cp thing)
+After that, click **Netlist**.
 
-using your choice of text-editor you can investigate that .spice file
+To get the netlist into your current directory (otherwise it will be deleted):
+
+```bash
+cp ~/.xschem/simulations/yourdesignname.spice .
+```
+
+(Your terminal may be blocked by xschem. Open a new terminal tab and run the
+command above.)
+
+You can inspect the `.spice` file using your preferred text editor.
 
 
 ![Step 12: layout preparation](src/media/step12_schematicnetlistforlayoutlvs.png)
 
 
-### 13. open klayout
-please be sure that technology is selected as below image and you see efabless thing above it 
+### 13. Open KLayout
+Make sure the technology shown in the image is selected and that you can see
+the Efabless option above it.
 
-if everything okay file-> new layout topcell name i recomment you to use same name with your design
+If everything is correct, select **File -> New Layout**. For the top cell name,
+we recommend using the same name as your design.
 
-after it opens file-> save then write same design_name.gds this time put it with .gds extension
+After it opens, select **File -> Save** and save it as `design_name.gds`.
 
-unfortunately import xschem's spice file to here is not working well so we need to add devices manually by ourhand
+Importing xschem's SPICE file here does not work well, so devices must be added
+manually.
 
 ![Step 13: open klayout](src/media/step13_emptyklayout.png)
 
-### 14. nfet klayout
-click instance from the above toolbar on the left it will show some lib and cell selection 
+### 14. Add an NFET in KLayout
+Click **Instance** in the toolbar on the left. This will show the library and
+cell selection.
 
-take library to sky130 pcells
+Select the `sky130` pcells library.
 
-and choose nfet as shown
+Choose `nfet` as shown.
 
-when you click ok you can place it somewhere in your design
+When you click **OK**, you can place it in your design.
 
-it will be shown like white thing to see layers of it simply press + key to see deeper layers - to opposite
+It will appear as a white shape. Press `+` to see deeper layers and `-` to go
+back.
 
-also select nfet and be sure model width length kind of things 
+Select the NFET and review its model, width, length, and other settings.
 
-right now lots of the options there will be meaningless but body tie etc also gate contact selection you should give a search about
+Many options will not be relevant yet, but you should learn about body ties
+and gate-contact selection.
 
-for now simply choose bulk type to bulktie
-and gate contact position to top
+For now, choose `bulktie` for the bulk type and `top` for the gate-contact
+position.
 
 ![Step 14: nfet klayout](src/media/step14_placenfet.png)
 
-### 15. inverter layout
-place pfet thing again be sure width legth other stuff and draw connections
+### 15. Create the Inverter Layout
+Place the PFET, check its width, length, and other settings, and draw the
+connections.
 
-to draw something on right click the layer and press box above such that you can paths etc
+To draw something, right-click the layer and select **Box** above. You can then
+draw boxes, paths, and other shapes.
 
-explaining everything here will lengthten the situation i will add youtube video to show how to do things 
+Explaining everything here would make this guide too long, so a YouTube video
+will be added to show how to do it.
 
-[add youtube link here ]
+[YouTube link will be added here.]
 
 ![Step 15: inverter layout](src/media/step15_klayoutinverter.png)
 
-### 16. DRC
-to run DRC you can select that toolbar with option if everything goes well you will see something like below 
+### 16. Run DRC
+Select the DRC option in the toolbar. If everything goes well, you will see
+something like the image below.
 
-if now you will see some numbers where when you click that numbers it will explain and highlght the point in layout
+If there are errors, numbers will appear. Click a number to see its explanation
+and highlight the relevant point in the layout.
 
 ![Step 16: DRC](src/media/step16_drcwindow.png)
 
 
-### 17. LVS
-to run LVS you need to 
-again go to e fabless sky and this time press run lvs
+### 17. Run LVS
+To run LVS, go to **Efabless -> Sky130** and select **Run LVS**.
 
-after that you need to select .spice file you generated and kick open
+Select the `.spice` file you generated and click **Open**.
 ![Step 17: LVS](src/media/step17_lvswindow.png)
 
-### 18. LVS
-some options will be given here you can leave default and check results after run
+### 18. Review LVS Options
+You will see several options. You can leave them at their defaults and check
+the results after running LVS.
 
-unfortunately this is not given all lvs checks but interms of coarse level check this is very quick and you can look at and fix some things 
+This does not perform every LVS check, but it provides a quick coarse-level
+check that can help you find and fix some problems.
 
-meanwhile some time to  time please go file->save :)
+Remember to select **File -> Save** from time to time.
 ![Step 18: LVS](src/media/step18_lvsoptions.png)
 
-### 19. LVS netgen
-as said in above step lvs in klayout is not full check but we can use another tool for quick check for the sake of ease to lvs check and prevent manual pin overwrites and stuff 
-we provide simple bash script gds2spice
+### 19. Check LVS with Netgen
+As mentioned above, KLayout LVS is not a complete check. We also provide the
+`gds2spice` script for a quick LVS check without manually overwriting pins.
 
-before running lvs please create another directory inside layout directory as lvs
+Before running LVS, create an `lvs` directory inside the layout directory.
 
-type "mkdir lvs" to commandline
+```bash
+mkdir lvs
 cd lvs
 
 cp ../your_design.spice .
 cp ../your_design.gds .
+```
 
-first step we need to use gds2spice to get .spice file from gds by 
-(run inside lvs folder where you just copied stuff)
+First, use `gds2spice` to create a `.spice` file from the GDS file. Run this
+inside the `lvs` folder where you copied the files:
+```bash
 gds2spice your_design.gds your_design.spice
+```
 
-it should create your_design_magic.spice
+This should create `your_design_magic.spice`.
 
-you can investigate it at as you wish
+You can inspect it as needed.
 
-to compare this layout generated spice which schematic generated one 
+To compare the layout-generated SPICE with the schematic-generated SPICE,
+use Netgen as follows:
 
-use netgen as follows
-
+```bash
 netgen -batch lvs "your_design_magic.spice (top level name probably your_design)"\
 "your_design.spice (top level name probably your_design)" $PDK_ROOT/$PDK_ROOT/$PDK/libs.tech/netgen/sky130A_setup.tcl
+```
 
-this will give you comp.out and at the end you can see schematic vs layout check matched or not
+This creates `comp.out`. At the end, you can see whether the schematic and
+layout checks matched.
 
-note: this is actualy loading this klayout thing in magic and try to make ext2spice you can modify the shell script as you wish and remember this is still under development and could have some problems
+Note: This loads the KLayout design in Magic and attempts to create an
+`ext2spice` file. You can modify the shell script as needed. This workflow is
+still under development and may have problems.
 
 ![Step 19: LVS netgen](src/media/step19_netgenlvscheck.png)
 
 
-### 20. pex generation
-before running pex please create another directory inside layout directory as pex (pex and lvs are both under layout same hierarchy)
+### 20. Generate PEX
+Before running PEX, create a `pex` directory inside the layout directory. PEX
+and LVS should be at the same level under the layout directory.
 
-type "mkdir pex" to commandline
-cd pex 
+```bash
+mkdir pex
+cd pex
 
 cp ../your_design.spice .
 cp ../your_design.gds .
+```
 
-then run another script we provide to gds2pex
+Then run the `gds2pex` script we provide:
 
-your_design.gds your_design.spice
+```bash
+gds2pex your_design.gds your_design.spice
+```
 
 ![Step 20: pex generation](src/media/step20_pexresult.png)
 
 
-### 21. pex sim on symbol
-now we have parasitics added spice file for ourselves we need to make some tweaks in before make sym of that remember we created symbol for this inverter at first please open that in xschem left click some empty area and then press q
+### 21. Run PEX Simulation on the Symbol
+Now that we have a SPICE file with parasitics, we need to make some changes
+before simulating the symbol. Open the inverter symbol in xschem, left-click
+an empty area, and press `q`.
 
-then as you can see the image below change type:subcircuit to type:primitive
+As shown in the image below, change `type:subcircuit` to `type:primitive`.
 
 ![Step 21: pex sim on symbol](src/media/step21_symboltypeprimitve.png)
 
 
-### 22. pex sim on tb
-this is where say in testbench we add spice definition which symbol waits for us
-add that .include line 
+### 22. Run PEX Simulation on the Testbench
+In the testbench, add the SPICE definition that the symbol expects. Add the
+`.include` line.
 
-please not forget to edit path as where and what name you put.
+Remember to edit the path and filename to match your files.
 
-after that you can check netlist again 
+After that, you can check the netlist again.
 
-note: if you press shift+a and click netlist it will show netlist inplace
-note: there are other ways to import pex spice to tb you can search and use
+Note: Press `Shift+A` and click **Netlist** to show the netlist in place.
 
+Note: There are other ways to import PEX SPICE into the testbench; you can
+search for and use them.
 
-after this again you can use waveformviewer probably not much different for simple inverter wrt schematic one:)
+After this, you can use the waveform viewer again. For a simple inverter, the
+results should not differ much from the schematic simulation.
+
+Critical Note: after you are done with pex sim go symbol left click empty place then press q and revert the change we made to type:primitive   
+
 ![Step 22: pex sim on tb](src/media/step22_pextbedit.png)
 
+## Hierarchical Design
 
+This section introduces a design made from reusable schematic blocks. It is not managable to handle large design in single sheet and you need to get used to make reusable symbols
+
+### 1. Start a New Hierarchical Design
+
+Begin with a new top-level schematic. Create another file which will be top level and put your inv.sym as below 2 of them make 1 buffer. 
+
+create symbol of it and create testbench which instantiete new thing symbol buf
+
+You can copy paste bunch of things from inv example.
+
+after succesfull sym if you are ready to go for layout again go to design schematic (not tb not sym)
+
+again choose correct simulation->lvs options and click netlist 
+
+copy the spice this time it will be like 
+
+cp ~/.xschem/simulations/buf.spice .
+
+![Step 1: buf xschem](src/media/step23_bufxschem.png)
+
+### 2. Start a New Hierarchical Layout
+
+again open layout new layout then name it with you design name (mine was buf)
+
+after that go to file->import->other files into current then using ... find your inv.gds and click import
+
+after that you can again at top click instance under local library (click magnifier and there should be inv)
+
+place 2 of them 
+![Step 2: buf klayout](src/media/step24_bufklayout.png)
+
+### 3. shallow select
+under your hierarchy (mine was TOP by mistaken it should be buf)
+click inv 
+
+and tick the shallow select box below otherwise you will edit this instantiated inv in place 
+
+wire them up put pin and label 
+
+first run drc (design rule check)
+
+then lvs 
+
+after that netgen lvs
+
+pex and sim (you need to change buf.sym to primitive and add .include to tb)
+![Step 3: buf klayout](src/media/step25_klayoutadd.png)
