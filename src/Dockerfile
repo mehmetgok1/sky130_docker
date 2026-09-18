@@ -117,4 +117,20 @@ WORKDIR /home/beta_vlsi
 # Auto-link Sky130 PDK tech and layer properties into KLayout
 RUN mkdir -p /home/beta_vlsi/.klayout/tech && \
     ln -snf /usr/local/share/pdk/sky130A/libs.tech/klayout /home/beta_vlsi/.klayout/tech/sky130A
+
+# Environment variables
+ENV PATH="/home/beta_vlsi/.local/bin:${PATH}"
+ENV KLAYOUT_HOME="/home/beta_vlsi/.klayout"
+ENV KLAYOUT_PATH="/home/beta_vlsi/.klayout:$PDK_ROOT/$PDK/libs.tech/klayout"    
+# Install pip and gdsfactory
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends python3-pip && \
+    rm -rf /var/lib/apt/lists/*
+
+USER beta_vlsi
+RUN python3 -m pip install --no-cache-dir --user gdsfactory
+# Add sky stdcells to klayout
+RUN mkdir -p /home/beta_vlsi/.klayout/libraries && \
+    find /usr/local/share/pdk/sky130A/libs.ref -type f -name "*.gds" -exec ln -snf {} /home/beta_vlsi/.klayout/libraries/ \;
+
 ENTRYPOINT ["/entry.sh"]
