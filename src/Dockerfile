@@ -142,5 +142,11 @@ COPY --chmod=755 gds2pex.sh /usr/local/bin/gds2pex
 
 USER beta_vlsi
 WORKDIR /home/beta_vlsi
-
+# Add bash keybindings
+RUN cat << 'EOF' >> /home/beta_vlsi/.bashrc
+bind '"\e[3;5~": kill-word'
+bind '"\C-H": backward-kill-word'
+bind '"\C-?": backward-kill-word'
+bind '"\e[127;5u": backward-kill-word'
+EOF
 ENTRYPOINT ["/entry.sh"]
