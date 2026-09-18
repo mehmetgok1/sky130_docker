@@ -1,5 +1,9 @@
 # Sky130 Docker Image
 
+> **Note:** The designs and layouts in this guide are not optimized. They are
+> provided for illustration only. Optimized designs will be shared in the
+> EE537 course.
+
 The `src` folder contains the Dockerfile, entrypoint, and wallpaper used to
 build the image. Customize those files there if you want to make changes to
 the Docker image.
@@ -355,56 +359,73 @@ search for and use them.
 After this, you can use the waveform viewer again. For a simple inverter, the
 results should not differ much from the schematic simulation.
 
-Critical Note: after you are done with pex sim go symbol left click empty place then press q and revert the change we made to type:primitive   
+**Critical note:** After you finish the PEX simulation, open the symbol,
+left-click an empty area, press `q`, and revert the change we made to
+`type:primitive`.
 
 ![Step 22: pex sim on tb](src/media/step22_pextbedit.png)
 
 ## Hierarchical Design
 
-This section introduces a design made from reusable schematic blocks. It is not managable to handle large design in single sheet and you need to get used to make reusable symbols
+This section introduces a design made from reusable schematic blocks. It is not
+practical to handle a large design on a single sheet, so reusable symbols and
+hierarchical design are important.
 
 ### 1. Start a New Hierarchical Design
 
-Begin with a new top-level schematic. Create another file which will be top level and put your inv.sym as below 2 of them make 1 buffer. 
+Begin with a new top-level schematic. Create a new file for the top level and
+place two copies of `inv.sym` in it to make one buffer.
 
-create symbol of it and create testbench which instantiete new thing symbol buf
+Create a symbol for the buffer, then create a testbench that instantiates the
+new `buf` symbol.
 
-You can copy paste bunch of things from inv example.
+You can copy and paste parts of the inverter example.
 
-after succesfull sym if you are ready to go for layout again go to design schematic (not tb not sym)
+After successfully creating the symbol, go to the design schematic, not the
+testbench or symbol, before starting the layout.
 
-again choose correct simulation->lvs options and click netlist 
+Choose the correct **Simulation -> LVS** options and click **Netlist** again.
 
-copy the spice this time it will be like 
+Copy the SPICE file. This time, the command will be:
 
+```bash
 cp ~/.xschem/simulations/buf.spice .
+```
 
 ![Step 1: buf xschem](src/media/step23_bufxschem.png)
 
-### 2. Start a New Hierarchical Layout
+### 2. Create the Hierarchical Layout
 
-again open layout new layout then name it with you design name (mine was buf)
+Open KLayout and create a new layout. Name it after your design; in this
+example, the design is called `buf`.
 
-after that go to file->import->other files into current then using ... find your inv.gds and click import
+Go to **File -> Import -> Other Files into Current**. Use the file browser to
+find `inv.gds`, then click **Import**.
 
-after that you can again at top click instance under local library (click magnifier and there should be inv)
+Click **Instance** at the top, open the local library, and click the magnifier.
+You should see `inv` in the available cells.
 
-place 2 of them 
+Place two instances of `inv` in the layout.
+
 ![Step 2: buf klayout](src/media/step24_bufklayout.png)
 
-### 3. shallow select
-under your hierarchy (mine was TOP by mistaken it should be buf)
-click inv 
+### 3. Edit the Hierarchical Layout
 
-and tick the shallow select box below otherwise you will edit this instantiated inv in place 
+Under the hierarchy, select the top cell. In this example, it should be `buf`,
+not `TOP`.
 
-wire them up put pin and label 
+Click `inv` and enable **Shallow Select**. Otherwise, you will edit the
+instantiated inverter in place.
 
-first run drc (design rule check)
+Wire the instances together, then add the required pins and labels.
 
-then lvs 
+Run DRC (design rule check) first.
 
-after that netgen lvs
+Then run LVS.
 
-pex and sim (you need to change buf.sym to primitive and add .include to tb)
+After that, run the Netgen LVS check.
+
+Finally, run PEX and simulate. Change `buf.sym` to `primitive` and add the
+`.include` line to the testbench.
+
 ![Step 3: buf klayout](src/media/step25_klayoutadd.png)
