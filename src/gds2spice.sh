@@ -17,7 +17,10 @@ fi
 INPUT_GDS="$(realpath "$1")"
 BASE_NAME="$(basename "$INPUT_GDS" .gds)"
 OUTPUT_SPICE="$(pwd)/${BASE_NAME}_magic.spice"
-PDK_MAGICRC="/usr/local/share/pdk/sky130A/libs.tech/magic/sky130A.magicrc"
+
+# Use environment variables with fallbacks
+PDK_PATH="${PDK_ROOT:-/usr/local/share/pdk}/${PDK:-sky130A}"
+PDK_MAGICRC="$PDK_PATH/libs.tech/magic/sky130A.magicrc"
 
 if [ ! -f "$INPUT_GDS" ]; then
     echo "Error: GDS file not found: $1" >&2
@@ -58,6 +61,17 @@ if [ -n "$SCHEM_SPICE" ]; then
         sed -i "s/^[.]subckt[[:space:]]\+${BASE_NAME}[[:space:]].*/$HEADER/I" "$OUTPUT_SPICE"
         echo "Aligned port header to: $HEADER"
     fi
+   
+    # Auto-include PDK standard cell models with duplication guard
+    for lib in hd hs ms hvl lp; do
+        if grep -q "sky130_fd_sc_${lib}__" "$SCHEM_SPICE" && ! grep -q "\* PDK_INCLUDED_${lib^^}" "$SCHEM_SPICE"; then
+            MODEL_FILE="$PDK_PATH/libs.ref/sky130_fd_sc_${lib}/spice/sky130_fd_sc_${lib}.spice"
+            if [ -f "$MODEL_FILE" ]; then
+                echo "Adding .include for Sky130 ${lib^^} cell library..."
+                printf "\n* PDK_INCLUDED_%s\n.include \"%s\"\n" "${lib^^}" "$MODEL_FILE" >> "$SCHEM_SPICE"
+            fi
+        fi
+    done
 fi
 
 echo "Generated: $OUTPUT_SPICE"
