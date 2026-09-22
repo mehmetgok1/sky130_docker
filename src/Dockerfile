@@ -41,7 +41,28 @@ RUN git clone https://github.com/RTimothyEdwards/netgen.git && \
     cd /tools && rm -rf netgen
 
 RUN git clone https://github.com/RTimothyEdwards/open_pdks.git && \
-    cd open_pdks && ./configure --enable-sky130-pdk && make -j$(nproc) && make install && \
+    cd open_pdks && ./configure --enable-sky130-pdk \
+        --with-sky130-variants=all \
+        --enable-primitive-sky130 \
+        --enable-io-sky130 \
+        --enable-sc-hd-sky130 \
+        --enable-sc-hs-sky130 \
+        --enable-sc-ms-sky130 \
+        --enable-sc-ls-sky130 \
+        --enable-sc-lp-sky130 \
+        --enable-sc-hdll-sky130 \
+        --enable-sc-hvl-sky130 \
+        --enable-alpha-sky130 \
+        --enable-xschem-sky130 \
+        --enable-klayout-sky130 \
+        --enable-precheck-sky130 \
+        --enable-sram-sky130 \
+        --enable-sram-space-sky130 \
+        --enable-reram-sky130 \
+        --enable-osu-t12-sky130 \
+        --enable-osu-t15-sky130 \
+        --enable-osu-t18-sky130 && \
+    make -j$(nproc) && make install && \
     cd /tools && rm -rf open_pdks
 
 # noVNC & websockify
