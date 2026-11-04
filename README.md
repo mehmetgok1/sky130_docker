@@ -299,7 +299,7 @@ use Netgen as follows:
 
 ```bash
 netgen -batch lvs "your_design_magic.spice (top level name probably your_design)"\
-"your_design.spice (top level name probably your_design)" $PDK_ROOT/$PDK_ROOT/$PDK/libs.tech/netgen/sky130A_setup.tcl
+"your_design.spice (top level name probably your_design)" $PDK_ROOT/$PDK/libs.tech/netgen/sky130A_setup.tcl
 ```
 
 This creates `comp.out`. At the end, you can see whether the schematic and
